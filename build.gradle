@@ -1,0 +1,49 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+	cucumber = '6.6.0'
+	selenium = '4.0.0-alpha-6'
+	hamcrest = '2.2'
+}
+ 
+dependencies {
+	compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: selenium
+	testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-api', version:  selenium	
+   	//implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '4.2.0'
+	testImplementation group: 'io.cucumber', name: 'cucumber-java', version: cucumber
+	testImplementation group: 'io.cucumber', name: 'cucumber-testng', version: cucumber
+	testImplementation "org.hamcrest:hamcrest-library:$hamcrest"
+	
+   	
+	
+	//testImplementation group: 'org.testng', name: 'testng', version: '7.3.0'
+    
+}
+
+test {
+	/*//for testng
+	useTestNG(){
+	suites  'testng.xml' //testngSuite //'testng.xml' pass -PtestngSuite=testng.xml
+	
+	//if you want testng reports
+	useDefaultListeners = true 
+	outputDirectory = file("$projectDir/testngOutput")
+	}
+	//Gradle Report
+	reports.html.setDestination(file("$projectDir/GradleReport"))
+	ignoreFailures = true
+	*/
+}
+

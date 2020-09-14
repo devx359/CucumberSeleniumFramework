@@ -1,0 +1,15 @@
+#Gradle**************************************
+
+#run with passing parameter
+gradle -PtestngSuite=testng.xml clean test
+gradlew.bat -PtestngSuite=testng.xml clean test 
+Note: to rerun build and test task even everything is uo to date add 'clean'
+
+WebDriverMANAGER**************************************
+WebDriverManager.chromedriver()
+                	.version("2.40")
+                	.arch32()
+                	.proxy("myproxyhostname:80") //for authentication issues behind corporate firewalls
+                	.proxyUser("myusername")
+                	.proxyPass("myawesomePassword")
+.setup();
