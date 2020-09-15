@@ -3,7 +3,7 @@ package demo.spring.selenium;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
-
+/*
 @CucumberOptions(
 		features = "src/test/resources/features",
 		glue= "demo/spring/selenium/stepdefinitions",
@@ -19,4 +19,4 @@ import io.cucumber.testng.CucumberOptions;
 public class TestRunner extends AbstractTestNGCucumberTests{ //for testng
 
 }
-
+*/

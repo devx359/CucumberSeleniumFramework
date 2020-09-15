@@ -1,6 +1,8 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+	id 'idea'
+    //id "io.freefair.lombok" version "5.2.1"
 }
 
 java {
@@ -16,6 +18,8 @@ ext {
 	cucumber = '6.6.0'
 	selenium = '4.0.0-alpha-6'
 	hamcrest = '2.2'
+	spring = '2.3.2.RELEASE'
+	lombok = '1.18.12'
 }
  
 dependencies {
@@ -25,6 +29,13 @@ dependencies {
 	testImplementation group: 'io.cucumber', name: 'cucumber-java', version: cucumber
 	testImplementation group: 'io.cucumber', name: 'cucumber-testng', version: cucumber
 	testImplementation "org.hamcrest:hamcrest-library:$hamcrest"
+	testImplementation "io.cucumber:cucumber-spring:$cucumber"
+	testImplementation "org.springframework.boot:spring-boot-starter-web:$spring"
+	testImplementation "org.springframework.boot:spring-boot-starter-test:$spring"
+	
+
+	testCompileOnly "org.projectlombok:lombok:$lombok"
+	testAnnotationProcessor "org.projectlombok:lombok:$lombok"
 	
    	
 	
@@ -46,4 +57,20 @@ test {
 	ignoreFailures = true
 	*/
 }
+configurations {
+	cucumberRuntime {
+		extendsFrom testImplementation
+	}
+}
 
+task cucumber() {
+	dependsOn assemble, compileTestJava
+	doLast {
+		javaexec {
+			main = "io.cucumber.core.cli.Main"
+			classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+			args = ['--plugin', 'pretty', '--glue', 'demo/spring/selenium/stepdefinitions', 'src/test/resources/features']
+		}
+ 
+	}
+}
