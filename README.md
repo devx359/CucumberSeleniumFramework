@@ -17,11 +17,14 @@ You should download and install these properly on your system. Visit the website
 
 * [Java](https://www.java.com/en/download/)
 * [Gradle](https://gradle.org/)
-* [Firefox](https://www.mozilla.org/)
+* [Chrome]
 
 ## Libraries
 
 * [Cucumber](https://cucumber.io/) - library used to support Behavior-Driven Development (BDD).
 * [Selenium WebDriver](https://www.selenium.dev/documentation/en/webdriver/) - drives a browser natively, as a real user would, either locally or on remote machines.
-* [Hamcrest](http://hamcrest.org/JavaHamcrest/tutorial) - a framework for writing matcher objects allowing ‘match’ rules to be defined declaratively.
+* [Hamcrest](http://hamcrest.org/JavaHamcrest/tutorial) - a framework for writing matcher objects allowing â€˜matchâ€™ rules to be defined declaratively.
+* [Lombok]
+* [Spring Boot]
+
 
