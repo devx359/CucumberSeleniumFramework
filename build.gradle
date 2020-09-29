@@ -1,9 +1,24 @@
+import net.masterthought.cucumber.ReportBuilder
+import net.masterthought.cucumber.Configuration
+
+buildscript {
+	repositories {
+		jcenter()
+	}
+
+	dependencies {
+		classpath "net.masterthought:cucumber-reporting:5.3.0"
+		classpath "com.avast.gradle:gradle-docker-compose-plugin:0.13.0"
+	}
+}
+
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
 	id 'idea'
     //id "io.freefair.lombok" version "5.2.1"
 }
+apply plugin: 'docker-compose'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -36,6 +51,8 @@ dependencies {
 
 	testCompileOnly "org.projectlombok:lombok:$lombok"
 	testAnnotationProcessor "org.projectlombok:lombok:$lombok"
+
+	//compile group: 'net.masterthought', name: 'cucumber-reporting', version: '5.3.1'
 	
    	
 	
@@ -43,7 +60,14 @@ dependencies {
     
 }
 
+
+
 test {
+
+	useTestNG()
+	scanForTestClasses = false
+	testLogging.showStandardStreams = true
+	systemProperties(System.properties)
 	/*//for testng
 	useTestNG(){
 	suites  'testng.xml' //testngSuite //'testng.xml' pass -PtestngSuite=testng.xml
@@ -57,6 +81,9 @@ test {
 	ignoreFailures = true
 	*/
 }
+
+
+
 configurations {
 	cucumberRuntime {
 		extendsFrom testImplementation
@@ -71,6 +98,42 @@ task cucumber() {
 			classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
 			args = ['--plugin', 'pretty', '--glue', 'demo/spring/selenium/stepdefinitions', 'src/test/resources/features']
 		}
- 
+
 	}
+}
+
+def generateReport() {
+	File reportOutputDirectory = new File("build/test-report")
+	reportOutputDirectory.deleteDir()
+
+	def jsonReports = fileTree(dir: "build/test-results").include '**/*.json'.toString()
+	List<String> jsonReportFiles = new ArrayList<String>()
+	jsonReports.each { File file ->
+		jsonReportFiles.add("build/test-results/${file.name}".toString())
+	}
+
+	String projectName = project.name
+	Configuration configuration = new Configuration(reportOutputDirectory, projectName)
+	configuration.addClassifications("Version", project.version);
+
+	ReportBuilder reportBuilder = new ReportBuilder(jsonReportFiles, configuration)
+	reportBuilder.generateReports()
+
+	println("\nReport: file://" + reportOutputDirectory.getCanonicalPath() + "/cucumber-html-reports/overview-features.html")
+}
+
+task generateReport() {
+	doLast {
+		generateReport()
+	}
+}
+
+
+test.finalizedBy generateReport //is saying to Gradle to execute the report task after the test execution.
+
+dockerCompose.isRequiredBy test
+
+dockerCompose {
+	useComposeFiles = ['docker-compose.yml']
+	scale = [firefox: 2, chrome: 2]
 }

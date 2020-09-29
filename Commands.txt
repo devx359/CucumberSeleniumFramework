@@ -5,6 +5,33 @@ gradle -PtestngSuite=testng.xml clean test
 gradlew.bat -PtestngSuite=testng.xml clean test 
 Note: to rerun build and test task even everything is uo to date add 'clean'
 
+#run specific cucumber feature file tag
+gradlew test -Dcucumber.filter.tags="@smoke"
+
+#Set spring profile to say test and run gradle.Spring profile chooses your properties(yml) file dynamically
+Just use filenames like Ex: propertyfilename-prod.yml or propertyfilename-test.yml
+
+1) SET SPRING_PROFILES_ACTIVE=test (In unix use SPRING_PROFILES_ACTIVE=test)
+2) gradlew clean test
+#to use default spring profile
+1)SET SPRING_PROFILES_ACTIVE=
+2) gradlew clean test
+
+#set testng dataprovider thread count for parallelism
+gradlew clean test -Ddataproviderthreadcount="3"
+
+###DOCKER----------------------------------------
+#to execute docker-compose.yml and setup grid
+docker-compose up -d
+#to close grid via docker compose
+docker-compose down
+#scale to more nodes
+docker-compose up -d --scale firefox=2 --scale chrome=2
+
+
+
+
+
 WebDriverMANAGER**************************************
 WebDriverManager.chromedriver()
                 	.version("2.40")
